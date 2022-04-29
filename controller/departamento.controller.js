@@ -7,7 +7,7 @@ const getDepartamentos = async (req, res) => {
     if (departamentoList.length === 0) {
       return res.status(404).json({ msg: "No hay departamentos" });
     }
-    res.status(200).json({ data: departamentoList });
+    res.status(200).json(departamentoList);
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
   }
@@ -29,7 +29,7 @@ const getDepartamento = async (req, res) => {
       });
     }
 
-    res.status(200).json({ data: departamento });
+    res.status(200).json(departamento);
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
   }
@@ -107,15 +107,31 @@ const deleteDepartamento = async (req, res) => {
       return res.status(400).json({ msg: "Id No valido" });
     }
 
-    const departamento = await Departamento.findOneAndDelete(id);
+    const departamento = await Departamento.findByIdAndRemove(id);
 
-    if(!departamento) {
+    if (!departamento) {
       return res.status(400).json({
         message: "Departamento no encontrado",
       });
     }
 
-    res.status(200).json({ msg: "Departamento Eliminado", departamento });
+    res.status(200).json({ msg: "Departamento Eliminado"});
+  } catch (error) {
+    res.status(500).json({ msg: "Error en el servidor" });
+  }
+};
+
+const contadorDepartamentos = async (req, res) => {
+  try {
+    const departamentoCount = await Departamento.countDocuments(
+      (count) => count
+    );
+
+    if (!departamentoCount) {
+      res.status(404).json({ msg: "No hay departamentos" });
+    }
+
+    res.status(200).json({ data: departamentoCount });
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
   }
@@ -127,4 +143,5 @@ module.exports = {
   createDepartamento,
   updateDepartamento,
   deleteDepartamento,
+  contadorDepartamentos,
 };

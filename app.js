@@ -9,6 +9,7 @@ require('dotenv/config');
 //Import Routes
 const departamentoRouter = require('./routes/departamento.routes');
 const cargoRouter = require('./routes/cargo.routes');
+// const empleadoRouter = require('./routes/empleado.routes');
 
 const api = process.env.API_URL;
 
@@ -22,6 +23,7 @@ app.use(morgan('tiny'));
 //Routers
 app.use(`${api}/departamento`, departamentoRouter);
 app.use(`${api}/cargo`, cargoRouter);
+// app.use(`${api}/empleado`, empleadoRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{ useNewUrlParser: true, useUnifiedTopology: true, dbName: 'rrhh' }).then(() => {
     console.log('Database Connection is ready...')

@@ -12,9 +12,7 @@ const getCargos = async (req, res) => {
     if (cargoList.length === 0) {
       return res.status(404).json({ msg: "No hay cargos" });
     }
-    res.status(200).json({
-      data: cargoList,
-    });
+    res.status(200).json(cargoList);
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
   }
@@ -39,7 +37,7 @@ const getCargo = async (req, res) => {
       });
     }
 
-    res.status(200).json({ data: cargo });
+    res.status(200).json(cargo);
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
   }
@@ -48,7 +46,7 @@ const getCargo = async (req, res) => {
 const createCargo = async (req, res) => {
   try {
     const departamento = await Departamento.findById(req.body.departamento);
-    
+
     if (!departamento) {
       return res.status(400).json({ msg: "Departamento no Existe" });
     }
@@ -119,7 +117,7 @@ const deleteCargo = async (req, res) => {
       return res.status(400).json({ msg: "Id No valido" });
     }
 
-    const cargo = await Cargo.findOneAndDelete(id);
+    const cargo = await Cargo.findByIdAndRemove(id);
 
     if (!cargo) {
       return res.status(400).json({
@@ -133,10 +131,25 @@ const deleteCargo = async (req, res) => {
   }
 };
 
+const contadorCargo = async (req, res) => {
+  const cargoCount = await Cargo.countDocuments((count) => count);
+
+  if (!cargoCount) {
+    res.status(500).json({
+      error: err,
+      success: false,
+    });
+  }
+  res.send({
+    cargoCount: cargoCount,
+  });
+};
+
 module.exports = {
   getCargos,
   getCargo,
   createCargo,
   updateCargo,
   deleteCargo,
+  contadorCargo,
 };
