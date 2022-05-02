@@ -4,10 +4,11 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 const getCargos = async (req, res) => {
   try {
-    const cargoList = await Cargo.find().populate("departamento", [
-      "nombre_departamento",
-      "email_corporativo",
-    ]);
+    const cargoList = await Cargo.find().populate("departamento", {
+      _id: 0,
+      nombre_departamento: 1,
+      // email_corporativo: 1,
+    });
 
     if (cargoList.length === 0) {
       return res.status(404).json({ msg: "No hay cargos" });
@@ -26,10 +27,11 @@ const getCargo = async (req, res) => {
       return res.status(404).json({ msg: "Id No valido" });
     }
 
-    const cargo = await Cargo.findById(id).populate("departamento", [
-      "nombre_departamento",
-      "email_corporativo",
-    ]);
+    const cargo = await Cargo.findById(id).populate("departamento", {
+      _id: 0,
+      nombre_departamento: 1,
+      // email_corporativo: 1,
+    });
 
     if (!cargo) {
       return res.status(400).json({
@@ -45,7 +47,9 @@ const getCargo = async (req, res) => {
 
 const createCargo = async (req, res) => {
   try {
-    const departamento = await Departamento.findById(req.body.departamento);
+    const departamento = await Departamento.findById(
+      req.body.departamento
+    ).populate("Departamento", "nombre_departamento");
 
     if (!departamento) {
       return res.status(400).json({ msg: "Departamento no Existe" });

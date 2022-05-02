@@ -8,11 +8,13 @@ const cargoSchema = mongoose.Schema({
     },
     nombre_cargo: {
         type: String,
-        required: true
+        required: true,
+        max: 150
     },
     descripcion: {
         type: String,
-        required: true
+        required: true,
+        max: 350
     },
 },{
     timestamps: true
