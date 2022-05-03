@@ -1,16 +1,16 @@
 const router = require("express").Router();
 const {
-  getCargos,
-  createCargo,
-  getCargo,
-  deleteCargo,
-  updateCargo,
-} = require("../controller/cargo.controller");
+  getEmpleados,
+  getEmpleado,
+  createEmpleado,
+  updateEmpleado,
+  deleteEmpleado
+} = require("../controller/empleado.controller");
 
-router.get("/", getCargos);
-router.get("/:id", getCargo);
-router.post("/", createCargo);
-router.put("/:id", updateCargo);
-router.delete("/:id", deleteCargo);
+router.get("/", getEmpleados);
+router.get("/:id", getEmpleado);
+router.post("/", createEmpleado);
+router.put("/:id", updateEmpleado);
+router.delete("/:id", deleteEmpleado);
 
 module.exports = router;
