@@ -4,9 +4,7 @@ const { Departamento } = require("../models/departamento.schema");
 const getDepartamentos = async (req, res) => {
   try {
     const departamentoList = await Departamento.find();
-    if (departamentoList.length === 0) {
-      return res.status(404).json({ msg: "No hay departamentos" });
-    }
+    
     res.status(200).json(departamentoList);
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
@@ -36,6 +34,7 @@ const getDepartamento = async (req, res) => {
 };
 
 const createDepartamento = async (req, res) => {
+  
   try {
     let emailExists = await Departamento.findOne({
       email_corporativo: req.body.email_corporativo,
@@ -115,7 +114,7 @@ const deleteDepartamento = async (req, res) => {
       });
     }
 
-    res.status(200).json({ msg: "Departamento Eliminado"});
+    res.status(200).json({ msg: "Departamento Eliminado" });
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
   }
@@ -127,11 +126,11 @@ const contadorDepartamentos = async (req, res) => {
       (count) => count
     );
 
-    if (!departamentoCount) {
-      res.status(404).json({ msg: "No hay departamentos" });
+    if (departamentoCount === 0) {
+      return res.send("No hay Departamentos" );
     }
 
-    res.status(200).json({ data: departamentoCount });
+    res.status(200).json(departamentoCount);
   } catch (error) {
     res.status(500).json({ msg: "Error en el servidor" });
   }

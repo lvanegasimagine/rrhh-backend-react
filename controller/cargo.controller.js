@@ -7,7 +7,6 @@ const getCargos = async (req, res) => {
     const cargoList = await Cargo.find().populate("departamento", {
       _id: 0,
       nombre_departamento: 1,
-      // email_corporativo: 1,
     });
 
     if (cargoList.length === 0) {
@@ -28,7 +27,6 @@ const getCargo = async (req, res) => {
     }
 
     const cargo = await Cargo.findById(id).populate("departamento", {
-      _id: 0,
       nombre_departamento: 1,
       // email_corporativo: 1,
     });
@@ -136,17 +134,17 @@ const deleteCargo = async (req, res) => {
 };
 
 const contadorCargo = async (req, res) => {
-  const cargoCount = await Cargo.countDocuments((count) => count);
+  try {
+    const cargoCount = await Cargo.countDocuments((count) => count);
 
-  if (!cargoCount) {
-    res.status(500).json({
-      error: err,
-      success: false,
-    });
+    if (cargoCount === 0) {
+      return res.send("No hay Cargos Actualmente");
+    }
+
+    res.status(200).json(cargoCount);
+  } catch (error) {
+    res.status(500).json({ msg: "Error en el servidor" });
   }
-  res.send({
-    cargoCount: cargoCount,
-  });
 };
 
 module.exports = {

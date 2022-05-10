@@ -35,16 +35,8 @@ const getEmpleado = async (req, res) => {
     }
 
     const empleado = await Empleado.findById(id)
-      .populate("departamento", {
-        _id: 0,
-        nombre_departamento: 1,
-        email_corporativo: 1,
-        telefono_corporativo: 1,
-      })
-      .populate("cargo", {
-        _id: 0,
-        nombre_cargo: 1,
-      });
+      .populate("departamento")
+      .populate("cargo");
 
     if (!empleado) {
       return res.status(400).json({
@@ -106,8 +98,9 @@ const updateEmpleado = async (req, res) => {
       return res.status(400).json({ msg: "Id No valido" });
     }
 
-    const empleado = await Empleado.findByIdAndUpdate(id,
-    {
+    const empleado = await Empleado.findByIdAndUpdate(
+      id,
+      {
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         sexo: req.body.sexo,
@@ -120,12 +113,14 @@ const updateEmpleado = async (req, res) => {
         correo_electronico: req.body.correo_electronico,
         departamento: req.body.departamento,
         cargo: req.body.cargo,
-    },{ new: true });
+      },
+      { new: true }
+    );
 
-    if(!empleado){
-        return res.status(400).json({
-            message: "Empleado no encontrado",
-        });
+    if (!empleado) {
+      return res.status(400).json({
+        message: "Empleado no encontrado",
+      });
     }
 
     res.status(200).json({ msg: "Empleado actualizado" });
@@ -156,10 +151,25 @@ const deleteEmpleado = async (req, res) => {
   }
 };
 
+const contadorEmpleado = async (req, res) => {
+  try {
+    const empleadoCount = await Empleado.countDocuments((count) => count);
+
+    if (empleadoCount === 0) {
+      return res.send("No hay Empleados Actualmente");
+    }
+
+    res.status(200).json(empleadoCount);
+  } catch (error) {
+    res.status(500).json({ msg: "Error en el servidor" });
+  }
+};
+
 module.exports = {
   getEmpleados,
   getEmpleado,
   createEmpleado,
   updateEmpleado,
   deleteEmpleado,
+  contadorEmpleado,
 };

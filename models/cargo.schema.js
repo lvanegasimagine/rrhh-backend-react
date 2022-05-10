@@ -4,7 +4,8 @@ const cargoSchema = mongoose.Schema({
     departamento: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Departamento',
-        required:true
+        required:true,
+        default: ''
     },
     nombre_cargo: {
         type: String,
